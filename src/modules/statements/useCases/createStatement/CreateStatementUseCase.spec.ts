@@ -55,7 +55,7 @@ describe("Create Statement",()=>{
     }).rejects.toBeInstanceOf(AppError);
   })
 
-  it("should not be able to create a new statement if don't have enough funds",()=>{
+  it("should not be able to create a new withdraw statement if don't have enough funds",()=>{
     expect(async ()=>{
       const user = await createUserUseCase.execute({
         name: "test1",
@@ -72,6 +72,37 @@ describe("Create Statement",()=>{
         type: "withdraw" as OperationType,
         amount: 120,
         description: "saque teste"
+      })
+    }).rejects.toBeInstanceOf(AppError);
+  })
+
+  it("should not be able to create a new transfer statement if don't have enough funds",()=>{
+    expect(async ()=>{
+      const user = await createUserUseCase.execute({
+        name: "test1",
+        email: "test1@test.com.br",
+        password: "test"
+      })
+
+      const user2 = await createUserUseCase.execute({
+        name: "test3",
+        email: "test3@test.com.br",
+        password: "test"
+      })
+
+      const userCreated = await inMemoryUsersRepository.findByEmail(user.email);
+
+      const userCreated2 = await inMemoryUsersRepository.findByEmail(user2.email);
+
+      const user_id:string = userCreated?.id!;
+      const user_id2:string = userCreated2?.id!;
+
+      await createStatementUseCase.execute({
+        user_id,
+        sender_id: user_id2,
+        type: "transfer" as OperationType,
+        amount: 120,
+        description: "transferencia teste"
       })
     }).rejects.toBeInstanceOf(AppError);
   })
