@@ -7,10 +7,20 @@ import { IStatementsRepository } from "../IStatementsRepository";
 export class InMemoryStatementsRepository implements IStatementsRepository {
   private statements: Statement[] = [];
 
-  async create(data: ICreateStatementDTO): Promise<Statement> {
+  async create({user_id,
+    sender_id,
+    amount,
+    description,
+    type}: ICreateStatementDTO): Promise<Statement> {
     const statement = new Statement();
 
-    Object.assign(statement, data);
+    Object.assign(statement, {
+    user_id,
+    sender_id,
+    amount,
+    description,
+    type
+    });
 
     this.statements.push(statement);
 
@@ -32,11 +42,8 @@ export class InMemoryStatementsRepository implements IStatementsRepository {
     const statement = this.statements.filter(operation => operation.user_id === user_id);
 
     const balance = statement.reduce((acc, operation) => {
-      if (operation.type === 'deposit') {
-        return acc + operation.amount;
-      } else {
-        return acc - operation.amount;
-      }
+      return acc + operation.amount;
+
     }, 0)
 
     if (with_statement) {

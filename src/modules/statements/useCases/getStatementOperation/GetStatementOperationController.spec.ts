@@ -1,5 +1,5 @@
 import request from "supertest";
-import {createConnection} from "../../../../database"
+import createConnection from "../../../../database"
 import { Connection } from "typeorm";
 import { hash } from "bcryptjs";
 import { v4 as uuidV4 } from "uuid";
@@ -10,10 +10,9 @@ let id: string;
 let password: string;
 
 describe("Get Statement Operation Controller",()=>{
-
   beforeAll(async ()=>{
     connection = await createConnection();
-    connection.runMigrations();
+    await connection.runMigrations();
     id = uuidV4();
     password = await hash("teste6",8);
 
@@ -24,6 +23,7 @@ describe("Get Statement Operation Controller",()=>{
   })
 
   it("should be able to get statement operation",async()=>{
+
     const session = await request(app).post("/api/v1/sessions")
     .send({
       email: "teste6@teste6.com.br",

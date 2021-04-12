@@ -1,5 +1,5 @@
 import request from "supertest";
-import {createConnection} from "../../../../database"
+import createConnection from "../../../../database"
 import { Connection } from "typeorm";
 import { hash } from "bcryptjs";
 import { v4 as uuidV4 } from "uuid";
@@ -13,14 +13,14 @@ describe("Get Balance Controller",()=>{
 
   beforeAll(async ()=>{
     connection = await createConnection();
-    connection.runMigrations();
+    await connection.runMigrations();
     id = uuidV4();
     password = await hash("teste5",8);
 
     await connection.query(
       `INSERT INTO users(id,name,email,password)
       VALUES('${id}','teste5','teste5@teste5.com.br','${password}')`
-    );
+    )
   })
 
   it("should be able get balance",async ()=>{

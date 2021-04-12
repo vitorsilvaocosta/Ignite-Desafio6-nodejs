@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn ./src/server.ts",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli",
-    "test": "NODE_ENV=test JWT_SECRET=senhasupersecreta123 jest --detectOpenHandles"
+    "test": "NODE_ENV=test jest --detectOpenHandles"
   },
   "dependencies": {
     "babel-jest": "^26.6.3",
